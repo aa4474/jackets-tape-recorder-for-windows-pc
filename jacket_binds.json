@@ -1,0 +1,28 @@
+{
+    "tab1": {
+        "10. Enemy Callouts & Warnings": "",
+        "11. Action Commands & Crowd Control": "",
+        "12. Requests for Assistance & Help": "",
+        "13. Threat Anticipation (Hostiles Arriving)": "",
+        "14. Acknowledgements & Confirmations": "",
+        "15. Automated PSA & Rules": "",
+        "16. Waiting, Pacing & Urgency": "",
+        "17. Taunts & Hostility": "",
+        "18. Communications & Tech Support": "",
+        "19. System Status & Hardware": "",
+        "2. Small Talk & Conversational": "",
+        "20. Mission Objectives & Status": "",
+        "3. Greetings & Farewells": "",
+        "4. Jokes, Trivia & Funny Lines": "",
+        "5. Navigation & Movement": "",
+        "6. Positive Lines & Praise": "",
+        "7. Negative Lines & Mistakes": "",
+        "8. Medical & First Aid": "",
+        "9. Ammunition & Resupply": ""
+    },
+    "tab2": {},
+    "audio": {
+        "device_id": 13,
+        "volume": 85
+    }
+}
