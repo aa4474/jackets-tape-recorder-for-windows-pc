@@ -53,7 +53,7 @@ This project is completely open-source. Anyone is free to fork the code, modify 
 2. Install the required Python libraries:
    `pip install -r requirements.txt`
 3. Compile the standalone executable using PyInstaller:
-   `pyinstaller --noconsole --onefile --icon=icon.ico main.py`
+   `pyinstaller --noconsole --onefile --icon=logo.ico main.py`
 
 ---
 **Credits:** Massive shoutout to [M4rkoHR](https://github.com/M4rkoHR) for the original mobile concept that inspired this PC port.
