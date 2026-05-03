@@ -54,6 +54,7 @@ class JacketSoundboard(tk.Tk):
         # UI Trackers (to instantly update text to "NONE" when clearing binds)
         self.tab1_hk_vars = {}
         self.tab2_hk_var = None
+        self.active_hotkeys_state = {}  # Tracks if a hotkey is currently being held down
 
         # Available Audio Devices
         self.output_devices = self.get_output_devices()
@@ -219,21 +220,46 @@ class JacketSoundboard(tk.Tk):
     # --- HOTKEY LOGIC ---
 
     def bind_all_hotkeys(self):
+        # 1. Remove all old hooks
         keyboard.unhook_all()
+        # 2. Reset the state tracker
+        self.active_hotkeys_state.clear()
+        
+        # 3. Take a static snapshot of the config to prevent thread-crashing
+        tab1_binds = list(self.config["tab1"].items())
+        tab2_binds = list(self.config["tab2"].items())
+        
+        # 4. Create a custom global event listener
+        def global_key_hook(e):
+            # Check Random Binds (Tab 1)
+            for cat, hk in tab1_binds:
+                if hk:
+                    try:
+                        if keyboard.is_pressed(hk):
+                            # Only trigger if it wasn't ALREADY pressed down
+                            if not self.active_hotkeys_state.get(hk, False):
+                                self.active_hotkeys_state[hk] = True
+                                self.play_random_from_category(cat)
+                        else:
+                            self.active_hotkeys_state[hk] = False
+                    except ValueError:
+                        pass
 
-        for cat, hk in self.config["tab1"].items():
-            if hk:
-                try:
-                    keyboard.add_hotkey(hk, self.play_random_from_category, args=[cat])
-                except ValueError:
-                    pass
+            # Check Specific Binds (Tab 2)
+            for path, hk in tab2_binds:
+                if hk and os.path.exists(path):
+                    try:
+                        if keyboard.is_pressed(hk):
+                            if not self.active_hotkeys_state.get(hk, False):
+                                self.active_hotkeys_state[hk] = True
+                                self.trigger_audio_sequence(path)
+                        else:
+                            self.active_hotkeys_state[hk] = False
+                    except ValueError:
+                        pass
 
-        for path, hk in self.config["tab2"].items():
-            if hk and os.path.exists(path):
-                try:
-                    keyboard.add_hotkey(hk, self.trigger_audio_sequence, args=[path])
-                except ValueError:
-                    pass
+        # 5. Attach our custom listener to run in the background
+        keyboard.hook(global_key_hook)
 
     def record_hotkey(self, key_id, tab, label_var):
         self.attributes('-topmost', True)
